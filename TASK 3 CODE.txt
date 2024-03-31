@@ -1,0 +1,56 @@
+TASK3 
+import re
+
+def evaluate_password_strength(password):
+    # Criteria flags
+    has_uppercase = any(char.isupper() for char in password)
+    has_lowercase = any(char.islower() for char in password)
+    has_numbers = any(char.isdigit() for char in password)
+    has_special = bool(re.search(r'[^a-zA-Z0-9]', password))
+    length = len(password)
+
+    # Scoring
+    score = 0
+    if length >= 8:
+        score += 1
+    if has_uppercase:
+        score += 1
+    if has_lowercase:
+        score += 1
+    if has_numbers:
+        score += 1
+    if has_special:
+        score += 1
+
+    # Feedback
+    feedback = "Your password's strength rating: "
+    if score == 5:
+        feedback += "Excellent"
+    elif score >= 3:
+        feedback += "Good"
+    elif score == 2:
+        feedback += "Weak"
+    else:
+        feedback += "Very Weak"
+
+    # Additional suggestions for improvement
+    suggestions = []
+    if not has_uppercase:
+        suggestions.append("Add at least one uppercase letter.")
+    if not has_lowercase:
+        suggestions.append("Add at least one lowercase letter.")
+    if not has_numbers:
+        suggestions.append("Add at least one number.")
+    if not has_special:
+        suggestions.append("Add at least one special character.")
+    if length < 8:
+        suggestions.append("Increase the password length to at least 8 characters.")
+
+    if suggestions:
+        feedback += "\nSuggestions to improve your password:\n- " + "\n- ".join(suggestions)
+
+    return feedback
+
+# Example usage
+password = input("Enter a password to assess its strength: ")
+print(evaluate_password_strength(password))
